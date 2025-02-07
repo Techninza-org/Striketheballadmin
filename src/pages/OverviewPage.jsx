@@ -1,0 +1,66 @@
+import { BarChart2, ShoppingBag, Users, Zap } from "lucide-react";
+import { motion } from "framer-motion";
+
+import Header from "../components/common/Header";
+import StatCard from "../components/common/StatCard";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import SalesOverviewChart from "../components/sales/SalesOverviewChart";
+import CategoryDistributionChart from "../components/overview/CategoryDistributionChart";
+
+
+const OverviewPage = () => {
+	const [stores, setStores] = useState('');
+	const [employees, setEmployees] = useState('');
+	const [packages, setPackages] = useState('');
+	const [bookings, setBookings] = useState('');
+	const fetchStores = async () => {
+		try {
+		  const response = await axios.get(
+			`${import.meta.env.VITE_BASE_URL}/auth/dashboard-details`
+		  );
+	
+		  if (response.data.valid) {
+			setStores(response.data.stores);
+			setEmployees(response.data.employees);
+			setPackages(response.data.packages);	
+			setBookings(response.data.bookings);
+		  }
+		} catch (error) {
+			console.log(error);
+		} 
+	  };
+	
+	  useEffect(() => {
+		fetchStores();
+	  }, []);
+	return (
+		<div className='flex-1 overflow-auto relative z-10'>
+			<Header title='Overview' />
+
+			<main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
+				{/* STATS */}
+				<motion.div
+					className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8'
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 1 }}
+				>
+					<StatCard name='Total Bookings' icon={ShoppingBag} value={bookings} color='#EC4899' />
+					<StatCard name='Total Packages' icon={BarChart2} value={packages} color='#10B981' />
+					<StatCard name='Total Stores' icon={Zap} value={stores} color='#6366F1' />
+					<StatCard name='Total Employees' icon={Users} value={employees} color='#8B5CF6' />
+				</motion.div>
+
+				{/* CHARTS */}
+
+				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
+					{/* <SalesOverviewChart /> */}
+					{/* <CategoryDistributionChart /> */}
+					{/* <SalesChannelChart /> */}
+				</div>
+			</main>
+		</div>
+	);
+};
+export default OverviewPage;
