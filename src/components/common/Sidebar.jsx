@@ -1,42 +1,48 @@
 import {
 	BarChart2,
-	BookImageIcon,
-	DollarSign,
 	DollarSignIcon,
-	Menu,
 	Package,
-	Settings,
 	ShoppingBag,
-	ShoppingCart,
-	TrendingUp,
 	User2Icon,
 	Users,
 } from "lucide-react";
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import Cookies from "js-cookie";
+import SideNav from "./SideNav";
 
-const SIDEBAR_ITEMS = [
-	{
-		name: "Overview",
-		icon: BarChart2,
-		color: "#6366f1",
-		href: "/",
-	},
+const GENERAL_SIDEBAR_ITEMS = [
+	{ name: "Overview", icon: BarChart2, color: "#6366f1", href: "/" },
 	{ name: "Stores", icon: Users, color: "#EC4899", href: "/stores" },
 	{ name: "Employees", icon: ShoppingBag, color: "#8B5CF6", href: "/employees" },
 	{ name: "Packages", icon: Package, color: "#8B5CF6", href: "/packages" },
 	{ name: "Bookings", icon: DollarSignIcon, color: "#EC4899", href: "/bookings" },
 	{ name: "Customers", icon: User2Icon, color: "#EC4899", href: "/customers" },
-	// { name: "Sales", icon: DollarSign, color: "#10B981", href: "/sales" },
-	// { name: "Orders", icon: ShoppingCart, color: "#F59E0B", href: "/orders" },
-	// { name: "Analytics", icon: TrendingUp, color: "#3B82F6", href: "/analytics" },
-	// { name: "Settings", icon: Settings, color: "#6EE7B7", href: "/settings" },
+	{ name: "Logs", icon: User2Icon, color: "#EC4899", href: "/logs" },
+];
+
+const STORE_SIDEBAR_ITEMS = [
+	{ name: "Overview", icon: BarChart2, color: "#6366f1", href: "/" },
+	{ name: "Bookings", icon: DollarSignIcon, color: "#EC4899", href: "/store-bookings" },
+	{ name: "Customers", icon: User2Icon, color: "#EC4899", href: "/customers" },
+	{ name: "Logs", icon: User2Icon, color: "#EC4899", href: "/store-logs" },
 ];
 
 const Sidebar = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-	const location = useLocation();
+	const [storeId, setStoreId] = useState(Cookies.get("storeId")); 
+	useEffect(() => {
+		const interval = setInterval(() => {
+			const currentStoreId = Cookies.get("storeId");
+			if (currentStoreId !== storeId) {
+				setStoreId(currentStoreId); 
+			}
+		}, 500); 
+
+		return () => clearInterval(interval);
+	}, [storeId]);
+
+	const sidebarItems = storeId ? STORE_SIDEBAR_ITEMS : GENERAL_SIDEBAR_ITEMS;
 
 	return (
 		<motion.div
@@ -45,50 +51,9 @@ const Sidebar = () => {
 			}`}
 			animate={{ width: isSidebarOpen ? 256 : 80 }}
 		>
-			<div className="h-full bg-gray-800 bg-opacity-50 backdrop-blur-md p-4 flex flex-col border-r border-gray-700">
-				<div className="flex gap-10 items-center ">
-					<motion.button
-						whileHover={{ scale: 1.1 }}
-						whileTap={{ scale: 0.9 }}
-						onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-						className="p-2 rounded-full hover:bg-gray-700 transition-colors max-w-fit"
-					>
-						<Menu size={24} />
-					</motion.button>
-					{isSidebarOpen && <img src="logo.png" alt="Logo" width={120} height={40} />}
-				</div>
-
-				<nav className="mt-8 flex-grow">
-					{SIDEBAR_ITEMS.map((item) => (
-						<Link key={item.href} to={item.href}>
-							<motion.div
-								className={`flex items-center p-4 text-sm font-medium rounded-lg transition-colors mb-2 ${
-									location.pathname === item.href ? "bg-gray-700" : "hover:bg-gray-700"
-								}`}
-							>
-								<item.icon
-									size={20}
-									style={{ color: item.color, minWidth: "20px" }}
-								/>
-								<AnimatePresence>
-									{isSidebarOpen && (
-										<motion.span
-											className="ml-4 whitespace-nowrap"
-											initial={{ opacity: 0, width: 0 }}
-											animate={{ opacity: 1, width: "auto" }}
-											exit={{ opacity: 0, width: 0 }}
-											transition={{ duration: 0.2, delay: 0.3 }}
-										>
-											{item.name}
-										</motion.span>
-									)}
-								</AnimatePresence>
-							</motion.div>
-						</Link>
-					))}
-				</nav>
-			</div>
+			<SideNav links={sidebarItems} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 		</motion.div>
 	);
 };
+
 export default Sidebar;

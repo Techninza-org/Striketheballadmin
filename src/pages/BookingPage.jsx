@@ -14,6 +14,7 @@ const BookingPage = () => {
 	const [bookings, setBookings] = useState([]);
 	const [stores, setStores] = useState([]);
 	const [selectedStore, setSelectedStore] = useState('0');
+	const [status, setStatus] = useState('');
     const fetchBookings = async () => {
         try {
           const authToken = Cookies.get("authToken");
@@ -56,16 +57,17 @@ const BookingPage = () => {
         } catch (error) {
             console.log(error);
         }
-      };
+    };
     
       useEffect(() => {
         fetchStores();
 		fetchBookings();
       }, []);
 
-	  const handleStoreChange = (e) => {
+	const handleStoreChange = (e) => {
 		const storeId = e.target.value;
 		setSelectedStore(storeId);
+		setStatus('all');
 	
 		if (storeId === '0') {
 			fetchBookings(); // Fetch all bookings if "All Stores" is selected
@@ -73,7 +75,40 @@ const BookingPage = () => {
 			fetchBookingsByStore(storeId); // Pass the storeId directly
 		}
 	};
+
+	const handleStatusChange = (e) => {
+		const status = e.target.value;
+		setStatus(status);
+		setSelectedStore('0');
+			
+		if (status === 'all') {
+			fetchBookings(); 
+		} else {
+			fetchBookingsByStatus(status); 
+		}
+	}
 	
+	const fetchBookingsByStatus = async (status) => {
+		try {
+			const authToken = Cookies.get("authToken");
+	
+			const response = await axios.get(
+				`${import.meta.env.VITE_BASE_URL}/admin/booking/status/${status}`,
+				{
+					headers: {
+						Authorization: `Bearer ${authToken}`,
+						"Content-Type": "application/json",
+					},
+				}
+			);
+	
+			if (response.data.valid) {
+				setBookings(response.data.bookings);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	const fetchBookingsByStore = async (storeId) => {
 		try {
 			const authToken = Cookies.get("authToken");
@@ -115,6 +150,9 @@ const BookingPage = () => {
 					/>
 				</motion.div>
 				<div className="flex justify-between">
+					<div className="flex gap-8">
+
+					
 					<div>
 						<select
 							name="storeId"
@@ -130,6 +168,20 @@ const BookingPage = () => {
 								</option>
 							))}
 						</select>
+					</div>
+					<div>
+						<select
+							name="status"
+							value={status}
+							onChange={handleStatusChange}
+							required
+							className="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+							>
+							<option value="all">Status</option>
+							<option value="0">Pending</option>
+							<option value="1">Completed</option>
+						</select>
+					</div>
 					</div>
 					<a className="bg-white text-blue-800 p-2 rounded-md mb-4 font-bold" href="/add-booking">New Booking</a>
 				</div>

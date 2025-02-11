@@ -22,6 +22,11 @@ import BookingPage from "./pages/BookingPage";
 import AddCustomer from "./pages/AddCustomerPage";
 import CustomersPage from "./pages/CustomersPage";
 import AddBooking from "./pages/AddBookingPage";
+import AdminPrivateRoute from "./components/PrivateRoutes/AdminPrivateRoute";
+import StoreAddBooking from "./pages/StoreAddBookingPage";
+import StoreBookingsPage from "./pages/StoreBookingsPage";
+import AdminBookingLogsPage from "./pages/AdminBookingLog";
+import StoreBookingLogsPage from "./pages/StoreBookingLogPage";
 
 
 function App() {
@@ -81,17 +86,33 @@ function App() {
           <Route
             path="/stores"
             element={
-              <PrivateRoute>
+              <AdminPrivateRoute>
                 <StoresPage />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/logs"
+            element={
+              <AdminPrivateRoute>
+                <AdminBookingLogsPage />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/store-logs"
+            element={
+              <PrivateRoute>
+                <StoreBookingLogsPage />
               </PrivateRoute>
             }
           />
           <Route
             path="/add-store"
             element={
-              <PrivateRoute>
+              <AdminPrivateRoute>
                 <CreateStorePage />
-              </PrivateRoute>
+              </AdminPrivateRoute>
             }
           />
           <Route
@@ -113,17 +134,17 @@ function App() {
           <Route
             path="/add-employee"
             element={
-              <PrivateRoute>
+              <AdminPrivateRoute>
                 <AddEmployeePage />
-              </PrivateRoute>
+              </AdminPrivateRoute>
             }
           />
           <Route
             path="/packages"
             element={
-              <PrivateRoute>
+              <AdminPrivateRoute>
                 <PackagesPage />
-              </PrivateRoute>
+              </AdminPrivateRoute>
             }
           />
           <Route
@@ -137,17 +158,33 @@ function App() {
           <Route
             path="/bookings"
             element={
-              <PrivateRoute>
+              <AdminPrivateRoute>
                 <BookingPage />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/store-bookings"
+            element={
+              <PrivateRoute>
+                <StoreBookingsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/store-add-booking"
+            element={
+              <PrivateRoute>
+                <StoreAddBooking />
               </PrivateRoute>
             }
           />
           <Route
             path="/add-package"
             element={
-              <PrivateRoute>
+              <AdminPrivateRoute>
                 <AddPackage />
-              </PrivateRoute>
+              </AdminPrivateRoute>
             }
           />
           <Route

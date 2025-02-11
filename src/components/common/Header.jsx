@@ -4,11 +4,26 @@ import Cookies from "js-cookie";
 
 const Header = ({ title }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const authToken = Cookies.get("authToken");
+  const base64Url = authToken.split(".")[1]; // Get the payload part
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Base64URL to Base64
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split("")
+            .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+            .join("")
+        );
+
+        const payload = JSON.parse(jsonPayload);
+        const email = payload.email;
+        const name = payload.name;
+
 
   const navigate = useNavigate();
 
   const handleLogout = () => {
     Cookies.remove("authToken");
+    Cookies.remove("storeId");
     navigate("/login");
   };
 
@@ -45,15 +60,14 @@ const Header = ({ title }) => {
               alt="user photo"
             /> */}
             <div className="rounded-full bg-white w-8 h-8 grid place-content-center">
-              <div className="font-medium truncate text-black ">A</div>
+              <div className="font-medium truncate text-black ">{email[0].toUpperCase()}</div>
             </div>
           </button>
           {/* Dropdown menu */}
           {isDropdownOpen && (
             <div className="absolute right-10 top-10 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 z-50">
               <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                <div>Admin</div>
-                <div className="font-medium truncate">admin@gmail.com</div>
+                <div className="font-medium truncate">{email}</div>
               </div>
               {/* <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                 <li>

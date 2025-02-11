@@ -4,75 +4,52 @@ import { Search } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const CustomersTable = () => {
+const AdminLogsTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredStores, setFilteredStores] = useState([]);
   const [stores, setStores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const storeId = Cookies.get("storeId");
 
-  const fetchStores = async () => {
-	try {
-	//   const authToken = Cookies.get("authToken");
+  const fetchLogs = async () => {
+    try {
+      const authToken = Cookies.get("authToken");
 
-	  const response = await axios.get(
-		`${import.meta.env.VITE_BASE_URL}/customer`,
-		{
-		  headers: {
-			// Authorization: `Bearer ${authToken}`,
-			"Content-Type": "application/json",
-		  },
-		}
-	  );
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/admin/booking/logs/all`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-	  if (response.data.valid) {
-		setStores(response.data.customers);
-		setFilteredStores(response.data.customers);
-	  }
-	} catch (error) {
-	  setError(error.response?.data?.error || error.message);
-	} finally {
-	  setLoading(false);
-	}
+      if (response.data.valid) {
+        setStores(response.data.bookingLogs);
+        setFilteredStores(response.data.bookingLogs);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    fetchStores();
+    fetchLogs();
   }, []);
 
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
     const filtered = stores.filter(
-      (store) =>
-        store.name.toLowerCase().includes(term) ||
-        store.address.toLowerCase().includes(term) ||
-        store.phone.toLowerCase().includes(term)
+      (log) =>
+        log.booking.store.name.toLowerCase().includes(term) ||
+        log.employee.name.toLowerCase().includes(term) ||
+        log.booking.customer.name.toLowerCase().includes(term)
     );
     setFilteredStores(filtered);
   };
-
-  async function handleDelete(id) {
-    console.log(id);
-    // const authToken = Cookies.get("authToken");
-
-    const response = await axios.delete(
-      `${import.meta.env.VITE_BASE_URL}/customer/${id}`,
-      {
-        headers: {
-        //   Authorization: `Bearer ${authToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-	
-	if (response.data.valid) {
-		fetchStores();
-	}else{
-		setError(response.data.message);
-	}
-  }
 
   if (loading) {
     return <div className="text-center text-gray-100">Loading...</div>;
@@ -84,17 +61,17 @@ const CustomersTable = () => {
 
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
+      className="bg-gray-800 mt-20 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-100">Customers</h2>
+        <h2 className="text-xl font-semibold text-gray-100">Booking Logs</h2>
         <div className="relative">
           <input
             type="text"
-            placeholder="Search customers..."
+            placeholder="Search logs..."
             className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={handleSearch}
@@ -108,26 +85,27 @@ const CustomersTable = () => {
           <thead>
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Name
+                Store
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Phone
+                Employee
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Email
+                Customer
               </th>
-              {!storeId && 
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Actions
+                Overs Played
               </th>
-              }
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Date
+              </th>
             </tr>
           </thead>
 
           <tbody className="divide-y divide-gray-700">
-            {filteredStores.map((store) => (
+            {filteredStores.map((log) => (
               <motion.tr
-                key={store.id}
+                key={log.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
@@ -136,30 +114,36 @@ const CustomersTable = () => {
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
                       <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-400 to-blue-500 flex items-center justify-center text-white font-semibold">
-                        {store.name.charAt(0)}
+                        {log?.booking?.store?.name.charAt(0)}
                       </div>
                     </div>
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-100">
-                        {store.name}
+                        {log?.booking?.store?.name}
                       </div>
                     </div>
                   </div>
                 </td>
-
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-300">{store.phone}</div>
+                    <div className="text-sm font-medium text-gray-100">
+                      {log?.employee?.name}
+                    </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-300">{store.email}</div>
+                    <div className="text-sm font-medium text-gray-100">
+                    {log?.booking?.customer?.name}
+                    </div>
                 </td>
-                {!storeId && 
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  <button className="text-red-400 hover:text-red-300" onClick={() => handleDelete(store.id)}>
-                    Delete
-                  </button>
+                <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-100">
+                    {log?.overs}
+                    </div>
                 </td>
-                }
+                <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-100">
+                    {log?.createdAt.slice(0, 10)}
+                    </div>
+                </td>
               </motion.tr>
             ))}
           </tbody>
@@ -169,4 +153,4 @@ const CustomersTable = () => {
   );
 };
 
-export default CustomersTable;
+export default AdminLogsTable;

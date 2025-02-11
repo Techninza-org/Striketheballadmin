@@ -1,17 +1,32 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { Edit, Edit2Icon, Search } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import BookingDetailModal from "./BookingDetailModal";
 
 const BookingsTable = ({ bookings }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedBookingId, setSelectedBookingId] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [filteredBookings, setFilteredBookings] = useState(bookings);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    const openEditBookingModal = (id) => {
+        console.log("Edit booking with id:", id);
+        setSelectedBookingId(id);
+        setIsModalOpen(true);
+      };
+    
+      const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedBookingId(null);
+
+      };
+
     useEffect(() => {
-        setFilteredBookings(bookings); // Update filteredBookings when bookings prop changes
+        setFilteredBookings(bookings); 
     }, [bookings]);
 
     const handleSearch = (e) => {
@@ -41,6 +56,7 @@ const BookingsTable = ({ bookings }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
         >
+            <BookingDetailModal isOpen={isModalOpen} onClose={closeModal} bookingId={selectedBookingId} />
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold text-gray-100">Bookings</h2>
                 <div className="relative">
@@ -81,7 +97,13 @@ const BookingsTable = ({ bookings }) => {
                                 Overs
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                Overs Left
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                                 Price
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                Actions
                             </th>
                         </tr>
                     </thead>
@@ -128,8 +150,14 @@ const BookingsTable = ({ bookings }) => {
                                     <div className="text-sm text-gray-300">{booking?.overs}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="text-sm text-gray-300">{booking?.oversLeft}</div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm text-gray-300">{booking?.price}</div>
                                 </td>
+                                {booking.oversLeft > 0 && <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="text-sm text-gray-300 cursor-pointer" onClick={() => openEditBookingModal(booking?.id)}><Edit /></div>
+                                </td>}
                             </motion.tr>
                         ))}
                     </tbody>

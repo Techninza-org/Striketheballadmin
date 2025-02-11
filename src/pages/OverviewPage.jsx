@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import SalesOverviewChart from "../components/sales/SalesOverviewChart";
 import CategoryDistributionChart from "../components/overview/CategoryDistributionChart";
+import Cookies from "js-cookie";
 
 
 const OverviewPage = () => {
@@ -14,8 +15,28 @@ const OverviewPage = () => {
 	const [employees, setEmployees] = useState('');
 	const [packages, setPackages] = useState('');
 	const [bookings, setBookings] = useState('');
+	const storeId = Cookies.get("storeId");
 	const fetchStores = async () => {
 		try {
+			if(storeId){
+				const authToken = Cookies.get("authToken");
+				const response = await axios.get(
+					`${import.meta.env.VITE_BASE_URL}/emp/dashboard`,
+					{
+						headers: {
+						  Authorization: `Bearer ${authToken}`,
+						  "Content-Type": "application/json",
+						},
+					  }
+				  );
+			
+				  if (response.data.valid) {
+					setStores(response.data.stores);
+					setEmployees(response.data.employees);
+					setPackages(response.data.packages);	
+					setBookings(response.data.bookings);
+				  }
+			}else{
 		  const response = await axios.get(
 			`${import.meta.env.VITE_BASE_URL}/auth/dashboard-details`
 		  );
@@ -26,6 +47,7 @@ const OverviewPage = () => {
 			setPackages(response.data.packages);	
 			setBookings(response.data.bookings);
 		  }
+		}
 		} catch (error) {
 			console.log(error);
 		} 
@@ -48,8 +70,8 @@ const OverviewPage = () => {
 				>
 					<StatCard name='Total Bookings' icon={ShoppingBag} value={bookings} color='#EC4899' />
 					<StatCard name='Total Packages' icon={BarChart2} value={packages} color='#10B981' />
-					<StatCard name='Total Stores' icon={Zap} value={stores} color='#6366F1' />
-					<StatCard name='Total Employees' icon={Users} value={employees} color='#8B5CF6' />
+					{!storeId && <StatCard name='Total Stores' icon={Zap} value={stores} color='#6366F1' />}
+					{!storeId && <StatCard name='Total Employees' icon={Users} value={employees} color='#8B5CF6' />}
 				</motion.div>
 
 				{/* CHARTS */}

@@ -22,6 +22,21 @@ export default function Login() {
       );
       if (response.data.message === "Ok") {
         Cookies.set("authToken", response.data.user.token, { expires: 7 });
+        const authToken = response.data.user.token;
+        const base64Url = authToken.split(".")[1]; // Get the payload part
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Base64URL to Base64
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split("")
+            .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+            .join("")
+        );
+
+        const payload = JSON.parse(jsonPayload);
+        const storeId = payload.storeId;
+        if (storeId) {
+          Cookies.set("storeId", storeId, { expires: 7 });
+        }
         navigate("/");
       } else {
         alert("Invalid Login Credentials");
