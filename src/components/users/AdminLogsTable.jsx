@@ -96,7 +96,7 @@ const AdminLogsTable = () => {
     >
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-100">Booking Logs</h2>
-        <div className="relative">
+        {/* <div className="relative">
           <input
             type="text"
             placeholder="Search logs..."
@@ -105,7 +105,7 @@ const AdminLogsTable = () => {
             onChange={handleSearch}
           />
           <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
-        </div>
+        </div> */}
       </div>
 
       <div className="overflow-x-auto">

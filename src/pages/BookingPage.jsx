@@ -15,6 +15,7 @@ const BookingPage = () => {
 	const [stores, setStores] = useState([]);
 	const [selectedStore, setSelectedStore] = useState('0');
 	const [status, setStatus] = useState('');
+	const [customerType, setCustomerType] = useState('');
     const fetchBookings = async () => {
         try {
           const authToken = Cookies.get("authToken");
@@ -87,7 +88,40 @@ const BookingPage = () => {
 			fetchBookingsByStatus(status); 
 		}
 	}
+
+	const handleCustomerTypeChange = (e) => {
+		const type = e.target.value;
+		setCustomerType(type);
+		setSelectedStore('0');
+			
+		if (type === 'all') {
+			fetchBookings(); 
+		} else {
+			fetchBookingsByCustomerType(type); 
+		}
+	}
 	
+	const fetchBookingsByCustomerType = async (customerType) => {
+		try {
+			const authToken = Cookies.get("authToken");
+	
+			const response = await axios.get(
+				`${import.meta.env.VITE_BASE_URL}/admin/booking/type/customer/${customerType}`,
+				{
+					headers: {
+						Authorization: `Bearer ${authToken}`,
+						"Content-Type": "application/json",
+					},
+				}
+			);
+	
+			if (response.data.valid) {
+				setBookings(response.data.bookings);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	const fetchBookingsByStatus = async (status) => {
 		try {
 			const authToken = Cookies.get("authToken");
@@ -180,6 +214,20 @@ const BookingPage = () => {
 							<option value="all">Status</option>
 							<option value="0">Pending</option>
 							<option value="1">Completed</option>
+						</select>
+					</div>
+					<div>
+						<select
+							name="customerType"
+							value={customerType}
+							onChange={handleCustomerTypeChange}
+							required
+							className="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+							>
+							<option value="all">Customer Type</option>
+							<option value="0">NORMAL</option>
+							<option value="1">IVR</option>
+							<option value="2">WHATSAPP</option>
 						</select>
 					</div>
 					</div>

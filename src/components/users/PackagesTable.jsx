@@ -45,9 +45,7 @@ const PackagesTable = () => {
     setSearchTerm(term);
     const filtered = stores.filter(
       (store) =>
-        store.name.toLowerCase().includes(term) ||
-        store.address.toLowerCase().includes(term) ||
-        store.phone.toLowerCase().includes(term)
+        store.name.toLowerCase().includes(term)
     );
     setFilteredStores(filtered);
   };
@@ -93,7 +91,7 @@ const PackagesTable = () => {
         <div className="relative">
           <input
             type="text"
-            placeholder="Search stores..."
+            placeholder="Search packages..."
             className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={handleSearch}

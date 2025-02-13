@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import EditCustomerModal from "./EditCustomerModal";
 
 const CustomersTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -11,6 +12,10 @@ const CustomersTable = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const storeId = Cookies.get("storeId");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
 
   const fetchStores = async () => {
 	try {
@@ -47,10 +52,32 @@ const CustomersTable = () => {
     const filtered = stores.filter(
       (store) =>
         store.name.toLowerCase().includes(term) ||
-        store.address.toLowerCase().includes(term) ||
-        store.phone.toLowerCase().includes(term)
+        store.phone.toLowerCase().includes(term) 
     );
     setFilteredStores(filtered);
+    setCurrentPage(1);
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredStores.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(filteredStores.length / itemsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   async function handleDelete(id) {
@@ -74,6 +101,16 @@ const CustomersTable = () => {
 	}
   }
 
+  const openModal = (id) => {
+    setSelectedCustomerId(id);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedCustomerId(null);
+  };
+
   if (loading) {
     return <div className="text-center text-gray-100">Loading...</div>;
   }
@@ -89,6 +126,9 @@ const CustomersTable = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
+      {isModalOpen && (
+        <EditCustomerModal cust_id={selectedCustomerId} onClose={closeModal} />
+      )}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-100">Customers</h2>
         <div className="relative">
@@ -125,7 +165,7 @@ const CustomersTable = () => {
           </thead>
 
           <tbody className="divide-y divide-gray-700">
-            {filteredStores.map((store) => (
+            {currentItems.map((store) => (
               <motion.tr
                 key={store.id}
                 initial={{ opacity: 0 }}
@@ -155,6 +195,9 @@ const CustomersTable = () => {
                 </td>
                 {!storeId && 
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                  <button className="text-blue-200 hover:text-blue-300 mr-6" onClick={() => openModal(store.id)}>
+                    Edit
+                  </button>
                   <button className="text-red-400 hover:text-red-300" onClick={() => handleDelete(store.id)}>
                     Delete
                   </button>
@@ -164,6 +207,84 @@ const CustomersTable = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-between items-center mt-6">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className="flex items-center gap-2 text-gray-400 hover:text-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed"
+        >
+          <ChevronLeft size={18} />
+          Previous
+        </button>
+
+        <div className="flex gap-2">
+          {currentPage > 3 && (
+            <button
+              onClick={() => handlePageChange(1)}
+              className={`px-3 py-1 rounded-lg ${
+                currentPage === 1
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-100"
+              }`}
+            >
+              1
+            </button>
+          )}
+
+          {currentPage > 4 && (
+            <span className="px-3 py-1 text-gray-400">...</span>
+          )}
+
+          {Array.from({ length: totalPages }, (_, index) => {
+            const pageNumber = index + 1;
+            if (
+              pageNumber >= currentPage - 2 &&
+              pageNumber <= currentPage + 2
+            ) {
+              return (
+                <button
+                  key={pageNumber}
+                  onClick={() => handlePageChange(pageNumber)}
+                  className={`px-3 py-1 rounded-lg ${
+                    currentPage === pageNumber
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-100"
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              );
+            }
+            return null;
+          })}
+
+          {currentPage < totalPages - 3 && (
+            <span className="px-3 py-1 text-gray-400">...</span>
+          )}
+
+          {currentPage < totalPages - 2 && (
+            <button
+              onClick={() => handlePageChange(totalPages)}
+              className={`px-3 py-1 rounded-lg ${
+                currentPage === totalPages
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-100"
+              }`}
+            >
+              {totalPages}
+            </button>
+          )}
+        </div>
+
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className="flex items-center gap-2 text-gray-400 hover:text-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed"
+        >
+          Next
+          <ChevronRight size={18} />
+        </button>
       </div>
     </motion.div>
   );

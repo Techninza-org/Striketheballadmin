@@ -59,7 +59,7 @@ const SubadminTable = () => {
     const filtered = stores.filter(
       (store) =>
         store.name.toLowerCase().includes(term) ||
-        store.address.toLowerCase().includes(term) ||
+        store.email.toLowerCase().includes(term) ||
         store.phone.toLowerCase().includes(term)
     );
     setFilteredStores(filtered);

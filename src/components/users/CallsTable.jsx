@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -11,6 +11,8 @@ const CallsTable = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const storeId = Cookies.get("storeId");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
 
   const fetchStores = async () => {
 	try {
@@ -46,11 +48,34 @@ const CallsTable = () => {
     setSearchTerm(term);
     const filtered = stores.filter(
       (store) =>
-        store.caller_no.toLowerCase().includes(term) ||
-        store.customer.name.toLowerCase().includes(term) ||
-        store.phone.toLowerCase().includes(term)
+        store.caller_no.toLowerCase().includes(term) 
+        // store.customer.name.toLowerCase().includes(term) ||
+        // store..toLowerCase().includes(term)
     );
     setFilteredStores(filtered);
+    setCurrentPage(1);
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredStores.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(filteredStores.length / itemsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   async function handleDelete(id) {
@@ -84,7 +109,7 @@ const CallsTable = () => {
 
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
+      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700 mt-20"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
@@ -94,7 +119,7 @@ const CallsTable = () => {
         <div className="relative">
           <input
             type="text"
-            placeholder="Search calls..."
+            placeholder="Search calls by phone..."
             className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={handleSearch}
@@ -126,7 +151,7 @@ const CallsTable = () => {
           </thead>
 
           <tbody className="divide-y divide-gray-700">
-            {filteredStores.map((call) => (
+            {currentItems.map((call) => (
               <motion.tr
                 key={call.id}
                 initial={{ opacity: 0 }}
@@ -166,6 +191,84 @@ const CallsTable = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-between items-center mt-6">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className="flex items-center gap-2 text-gray-400 hover:text-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed"
+        >
+          <ChevronLeft size={18} />
+          Previous
+        </button>
+
+        <div className="flex gap-2">
+          {currentPage > 3 && (
+            <button
+              onClick={() => handlePageChange(1)}
+              className={`px-3 py-1 rounded-lg ${
+                currentPage === 1
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-100"
+              }`}
+            >
+              1
+            </button>
+          )}
+
+          {currentPage > 4 && (
+            <span className="px-3 py-1 text-gray-400">...</span>
+          )}
+
+          {Array.from({ length: totalPages }, (_, index) => {
+            const pageNumber = index + 1;
+            if (
+              pageNumber >= currentPage - 2 &&
+              pageNumber <= currentPage + 2
+            ) {
+              return (
+                <button
+                  key={pageNumber}
+                  onClick={() => handlePageChange(pageNumber)}
+                  className={`px-3 py-1 rounded-lg ${
+                    currentPage === pageNumber
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-100"
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              );
+            }
+            return null;
+          })}
+
+          {currentPage < totalPages - 3 && (
+            <span className="px-3 py-1 text-gray-400">...</span>
+          )}
+
+          {currentPage < totalPages - 2 && (
+            <button
+              onClick={() => handlePageChange(totalPages)}
+              className={`px-3 py-1 rounded-lg ${
+                currentPage === totalPages
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-100"
+              }`}
+            >
+              {totalPages}
+            </button>
+          )}
+        </div>
+
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className="flex items-center gap-2 text-gray-400 hover:text-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed"
+        >
+          Next
+          <ChevronRight size={18} />
+        </button>
       </div>
     </motion.div>
   );

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -10,6 +10,8 @@ const EmployeeTable = () => {
   const [stores, setStores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
 
   const fetchEmployees = async () => {
 	try {
@@ -46,10 +48,33 @@ const EmployeeTable = () => {
     const filtered = stores.filter(
       (store) =>
         store.name.toLowerCase().includes(term) ||
-        store.address.toLowerCase().includes(term) ||
+        store.email.toLowerCase().includes(term) ||
         store.phone.toLowerCase().includes(term)
     );
     setFilteredStores(filtered);
+    setCurrentPage(1);
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredStores.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(filteredStores.length / itemsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   async function handleDelete(id) {
@@ -93,7 +118,7 @@ const EmployeeTable = () => {
         <div className="relative">
           <input
             type="text"
-            placeholder="Search stores..."
+            placeholder="Search employees..."
             className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={handleSearch}
@@ -118,9 +143,6 @@ const EmployeeTable = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Phone
               </th>
-              {/* <th className='px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider'>
-								Created On
-							</th> */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Actions
               </th>
@@ -128,7 +150,7 @@ const EmployeeTable = () => {
           </thead>
 
           <tbody className="divide-y divide-gray-700">
-            {filteredStores.map((store) => (
+            {currentItems.map((store) => (
               <motion.tr
                 key={store.id}
                 initial={{ opacity: 0 }}
@@ -159,11 +181,7 @@ const EmployeeTable = () => {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{store.phone}</div>
                 </td>
-                {/* <td className='px-6 py-4 whitespace-nowrap'>
-									<div className='text-sm text-gray-300'>{new Date(store.createdAt).toLocaleDateString()}</div>
-								</td> */}
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  {/* <button className='text-indigo-400 hover:text-indigo-300 mr-2'>Edit</button> */}
                   <button className="text-red-400 hover:text-red-300" onClick={() => handleDelete(store.id)}>
                     Delete
                   </button>
@@ -172,6 +190,84 @@ const EmployeeTable = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-between items-center mt-6">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className="flex items-center gap-2 text-gray-400 hover:text-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed"
+        >
+          <ChevronLeft size={18} />
+          Previous
+        </button>
+
+        <div className="flex gap-2">
+          {currentPage > 3 && (
+            <button
+              onClick={() => handlePageChange(1)}
+              className={`px-3 py-1 rounded-lg ${
+                currentPage === 1
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-100"
+              }`}
+            >
+              1
+            </button>
+          )}
+
+          {currentPage > 4 && (
+            <span className="px-3 py-1 text-gray-400">...</span>
+          )}
+
+          {Array.from({ length: totalPages }, (_, index) => {
+            const pageNumber = index + 1;
+            if (
+              pageNumber >= currentPage - 2 &&
+              pageNumber <= currentPage + 2
+            ) {
+              return (
+                <button
+                  key={pageNumber}
+                  onClick={() => handlePageChange(pageNumber)}
+                  className={`px-3 py-1 rounded-lg ${
+                    currentPage === pageNumber
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-100"
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              );
+            }
+            return null;
+          })}
+
+          {currentPage < totalPages - 3 && (
+            <span className="px-3 py-1 text-gray-400">...</span>
+          )}
+
+          {currentPage < totalPages - 2 && (
+            <button
+              onClick={() => handlePageChange(totalPages)}
+              className={`px-3 py-1 rounded-lg ${
+                currentPage === totalPages
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-700 text-gray-400 hover:bg-gray-600 hover:text-gray-100"
+              }`}
+            >
+              {totalPages}
+            </button>
+          )}
+        </div>
+
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className="flex items-center gap-2 text-gray-400 hover:text-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed"
+        >
+          Next
+          <ChevronRight size={18} />
+        </button>
       </div>
     </motion.div>
   );

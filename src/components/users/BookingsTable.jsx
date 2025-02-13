@@ -34,7 +34,8 @@ const BookingsTable = ({ bookings }) => {
       (booking) =>
         booking.customer?.name.toLowerCase().includes(term) ||
         booking.store?.name.toLowerCase().includes(term) ||
-        booking.customer?.phone.toLowerCase().includes(term)
+        booking.customer?.phone.toLowerCase().includes(term) ||
+        booking.bookingType.toLowerCase().includes(term) 
     );
     setFilteredBookings(filtered);
     setCurrentPage(1);
