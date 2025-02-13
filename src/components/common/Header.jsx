@@ -24,6 +24,7 @@ const Header = ({ title }) => {
   const handleLogout = () => {
     Cookies.remove("authToken");
     Cookies.remove("storeId");
+    Cookies.remove("accessTo");
     navigate("/login");
   };
 

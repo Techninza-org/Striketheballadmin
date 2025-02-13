@@ -27,6 +27,9 @@ import StoreAddBooking from "./pages/StoreAddBookingPage";
 import StoreBookingsPage from "./pages/StoreBookingsPage";
 import AdminBookingLogsPage from "./pages/AdminBookingLog";
 import StoreBookingLogsPage from "./pages/StoreBookingLogPage";
+import SubadminPage from "./pages/SubadminPage";
+import AddSubadminPage from "./pages/AddSubadminPage";
+import Calls from "./pages/CallsPage";
 
 
 function App() {
@@ -76,6 +79,14 @@ function App() {
             }
           />
           <Route
+            path="/subadmins"
+            element={
+              <AdminPrivateRoute>
+                <SubadminPage />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
             path="/post-products"
             element={
               <PrivateRoute>
@@ -96,6 +107,14 @@ function App() {
             element={
               <AdminPrivateRoute>
                 <AdminBookingLogsPage />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/calls"
+            element={
+              <AdminPrivateRoute>
+                <Calls />
               </AdminPrivateRoute>
             }
           />
@@ -136,6 +155,14 @@ function App() {
             element={
               <AdminPrivateRoute>
                 <AddEmployeePage />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/add-subadmin"
+            element={
+              <AdminPrivateRoute>
+                <AddSubadminPage />
               </AdminPrivateRoute>
             }
           />
