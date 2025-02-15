@@ -114,7 +114,10 @@ const BookingsTable = ({ bookings }) => {
                 Booking Type
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Booking Date
+                Date
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Time
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Package
@@ -174,7 +177,12 @@ const BookingsTable = ({ bookings }) => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">
-                    {booking.createdAt.slice(0, 10)}
+                    {booking.date}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-300">
+                    {booking.time}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">

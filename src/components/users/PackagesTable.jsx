@@ -111,11 +111,14 @@ const PackagesTable = () => {
                 Price
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Overs
+              </th>
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Title
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Description
-              </th>
+              </th> */}
               {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Store Id
               </th>
@@ -128,9 +131,9 @@ const PackagesTable = () => {
               {/* <th className='px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider'>
 								Created On
 							</th> */}
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Actions
-              </th>
+              </th> */}
             </tr>
           </thead>
 
@@ -161,21 +164,20 @@ const PackagesTable = () => {
                   <div className="text-sm text-gray-300">{store.price}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-300">{store.title}</div>
+                  <div className="text-sm text-gray-300">{store.overs}</div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                {/* <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{store.description}</div>
-                </td>
+                </td> */}
                 
                 {/* <td className='px-6 py-4 whitespace-nowrap'>
 									<div className='text-sm text-gray-300'>{new Date(store.createdAt).toLocaleDateString()}</div>
 								</td> */}
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  {/* <button className='text-indigo-400 hover:text-indigo-300 mr-2'>Edit</button> */}
+                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <button className="text-red-400 hover:text-red-300" onClick={() => handleDelete(store.id)}>
                     Delete
                   </button>
-                </td>
+                </td> */}
               </motion.tr>
             ))}
           </tbody>
