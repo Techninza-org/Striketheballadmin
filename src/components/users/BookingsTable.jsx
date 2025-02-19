@@ -11,7 +11,7 @@ const BookingsTable = ({ bookings }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(10);
 
   const openEditBookingModal = (id) => {
     setSelectedBookingId(id);

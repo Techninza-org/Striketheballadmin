@@ -13,7 +13,7 @@ const CustomersTable = () => {
   const [error, setError] = useState(null);
   const storeId = Cookies.get("storeId");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
 
