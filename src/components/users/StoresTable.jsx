@@ -45,9 +45,7 @@ const StoresTable = () => {
     setSearchTerm(term);
     const filtered = stores.filter(
       (store) =>
-        store.name.toLowerCase().includes(term) ||
-        store.address.toLowerCase().includes(term) ||
-        store.phone.toLowerCase().includes(term)
+        store.name.toLowerCase().includes(term)
     );
     setFilteredStores(filtered);
   };
@@ -115,15 +113,15 @@ const StoresTable = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Address
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Phone
-              </th>
+              </th> */}
               {/* <th className='px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider'>
 								Created On
 							</th> */}
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Actions
-              </th>
+              </th> */}
             </tr>
           </thead>
 
@@ -156,18 +154,17 @@ const StoresTable = () => {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{store.address}</div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                {/* <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{store.phone}</div>
-                </td>
+                </td> */}
                 {/* <td className='px-6 py-4 whitespace-nowrap'>
 									<div className='text-sm text-gray-300'>{new Date(store.createdAt).toLocaleDateString()}</div>
 								</td> */}
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  {/* <button className='text-indigo-400 hover:text-indigo-300 mr-2'>Edit</button> */}
+                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <button className="text-red-400 hover:text-red-300" onClick={() => handleDelete(store.id)}>
                     Delete
                   </button>
-                </td>
+                </td> */}
               </motion.tr>
             ))}
           </tbody>
