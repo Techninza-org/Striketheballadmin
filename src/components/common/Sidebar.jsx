@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { motion } from "framer-motion";
-import { BarChart2, Users, ShoppingBag, Package, DollarSignIcon, User2Icon, PhoneCall, Book, Power, Store, PersonStanding } from "lucide-react";
+import { BarChart2, Users, ShoppingBag, Package, DollarSignIcon, User2Icon, PhoneCall, Book, Power, Store, PersonStanding, BarChart3 } from "lucide-react";
 import SideNav from "./SideNav"; 
 
 const GENERAL_SIDEBAR_ITEMS = [
     { name: "Overview", icon: BarChart2, color: "#6366f1", href: "/" },
+    { name: "Customers", icon: Users, color: "#6366f1", href: "/customers" },
+    { name: "Bookings", icon: DollarSignIcon, color: "#8B5CF6", href: "/bookings" },
+    { name: "Manage Leads", icon: BarChart3, color: "#6366f1", href: "/manage-leads" },
+    { name: "Calls", icon: PhoneCall, color: "#8B5CF6", href: "/calls" },
+    { name: "Logs", icon: Book, color: "#EC4899", href: "/logs" },
     { name: "Stores", icon: Store, color: "#EC4899", href: "/stores" },
     { name: "Employees", icon: User2Icon, color: "#8B5CF6", href: "/employees" },
     { name: "Subadmins", icon: PersonStanding, color: "#6366f1", href: "/subadmins" },
     { name: "Packages", icon: Package, color: "#EC4899", href: "/packages" },
-    { name: "Bookings", icon: DollarSignIcon, color: "#8B5CF6", href: "/bookings" },
-    { name: "Customers", icon: Users, color: "#6366f1", href: "/customers" },
-    { name: "Logs", icon: Book, color: "#EC4899", href: "/logs" },
-    { name: "Calls", icon: PhoneCall, color: "#8B5CF6", href: "/calls" },
+    
 ];
 
 const STORE_SIDEBAR_ITEMS = [

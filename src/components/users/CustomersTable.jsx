@@ -4,6 +4,7 @@ import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import EditCustomerModal from "./EditCustomerModal";
+import { Link } from "react-router-dom";
 
 const CustomersTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,16 +17,15 @@ const CustomersTable = () => {
   const [itemsPerPage] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [stages, setStages] = useState([]);
+  const [sources, setSources] = useState([]);
 
   const fetchStores = async () => {
 	try {
-	//   const authToken = Cookies.get("authToken");
-
 	  const response = await axios.get(
 		`${import.meta.env.VITE_BASE_URL}/customer`,
 		{
 		  headers: {
-			// Authorization: `Bearer ${authToken}`,
 			"Content-Type": "application/json",
 		  },
 		}
@@ -41,9 +41,24 @@ const CustomersTable = () => {
 	  setLoading(false);
 	}
   };
+  async function getSources(){
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/lead/source`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if(response.data.valid){
+      setSources(response.data.sources);
+    }
+  }
 
   useEffect(() => {
     fetchStores();
+    getStages();
+    getSources();
   }, []);
 
   const handleSearch = (e) => {
@@ -99,7 +114,7 @@ const CustomersTable = () => {
 	}else{
 		setError(response.data.message);
 	}
-  }
+}
 
   const openModal = (id) => {
     setSelectedCustomerId(id);
@@ -119,6 +134,72 @@ const CustomersTable = () => {
     return <div className="text-center text-red-500">{error}</div>;
   }
 
+  async function getStages() {
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/lead/stage`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.data.valid) {
+      setStages(response.data.stages);
+    }
+  }
+
+  async function handleStageFilter(stage){
+    if(stage === ""){
+      fetchStores();
+    }else{
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/lead/customer/leads/stage/${stage}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.valid) {
+        setStores(response.data.customers);
+        setFilteredStores(response.data.customers);
+      }
+  }
+}
+  async function handleSourceFilter(source){
+    if(source === ""){
+      fetchStores();
+    }else{
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/lead/customer/leads/source/${source}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.valid) {
+        setStores(response.data.customers);
+        setFilteredStores(response.data.customers);
+      }
+  }
+}
+
+  async function getTodayCallbacks(){
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/lead/today-callbacks`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if(response.data.valid){
+      setStores(response.data.customers);
+      setFilteredStores(response.data.customers);
+    }
+  }
+
   return (
     <motion.div
       className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
@@ -129,8 +210,44 @@ const CustomersTable = () => {
       {isModalOpen && (
         <EditCustomerModal cust_id={selectedCustomerId} onClose={closeModal} />
       )}
+      
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-100">Customers</h2>
+        <div className="flex gap-10">
+
+          <button className="bg-blue-900 p-2 rounded-md text-white" onClick={getTodayCallbacks}>Today Callbacks</button>
+
+        
+            <div className="w-[200px]">
+              <select
+                name="stage"
+                onChange={(e)=>handleStageFilter(e.target.value)}
+                required
+                className="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select a stage</option>
+                {stages?.map((stage) => (
+                  <option key={stage.id} value={stage.name}>
+                    {stage.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="w-[200px]">
+              <select
+                name="source"
+                onChange={(e)=>handleSourceFilter(e.target.value)}
+                required
+                className="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select a source</option>
+                {sources?.map((source) => (
+                  <option key={source.id} value={source.name}>
+                    {source.name}
+                  </option>
+                ))}
+              </select>
+            </div>
         <div className="relative">
           <input
             type="text"
@@ -140,6 +257,8 @@ const CustomersTable = () => {
             onChange={handleSearch}
           />
           <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
+        </div>
+        <button className="bg-blue-900 p-2 rounded-md text-white" onClick={fetchStores}>Reset</button>
         </div>
       </div>
 
@@ -153,9 +272,9 @@ const CustomersTable = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Phone
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Email
-              </th>
+              </th> */}
               {!storeId && 
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Actions
@@ -190,17 +309,23 @@ const CustomersTable = () => {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{store.phone}</div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                {/* <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{store.email}</div>
-                </td>
+                </td> */}
                 {!storeId && 
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <button className="text-blue-200 hover:text-blue-300 mr-6" onClick={() => openModal(store.id)}>
                     Edit
                   </button>
-                  <button className="text-red-400 hover:text-red-300" onClick={() => handleDelete(store.id)}>
+                  {/* <button className="text-red-400 hover:text-red-300" onClick={() => handleDelete(store.id)}>
                     Delete
-                  </button>
+                  </button> */}
+                  <Link to={`/followup/${store.id}`} >
+                    <button className=" bg-white rounded-md p-2 text-black">
+                    Follow Up
+                    </button>
+
+                  </Link>
                 </td>
                 }
               </motion.tr>

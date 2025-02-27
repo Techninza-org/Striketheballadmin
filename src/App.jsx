@@ -30,6 +30,9 @@ import StoreBookingLogsPage from "./pages/StoreBookingLogPage";
 import SubadminPage from "./pages/SubadminPage";
 import AddSubadminPage from "./pages/AddSubadminPage";
 import Calls from "./pages/CallsPage";
+import Dashboard from "./components/dashboard/Followup";
+import ManageLeads from "./components/dashboard/ManageLeads";
+import Followup from "./components/dashboard/Followup";
 
 
 function App() {
@@ -44,17 +47,14 @@ function App() {
           : "bg-gray-900 text-gray-100 overflow-hidden"
       }`}
     >
-      {/* Background effect */}
       {!isLoginPage && (
         <div className="fixed inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 opacity-80" />
         </div>
       )}
 
-      {/* Sidebar */}
       {!isLoginPage && <Sidebar />}
 
-      {/* Page content */}
       <div
         className={`flex-1 ${
           isLoginPage ? "flex items-center justify-center" : "overflow-auto"
@@ -68,6 +68,22 @@ function App() {
               <PrivateRoute>
                 <OverviewPage />
               </PrivateRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <AdminPrivateRoute>
+                <Dashboard />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/manage-leads"
+            element={
+              <AdminPrivateRoute>
+                <ManageLeads />
+              </AdminPrivateRoute>
             }
           />
           <Route
@@ -243,6 +259,14 @@ function App() {
             element={
               <PrivateRoute>
                 <SettingsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/followup/:id"
+            element={
+              <PrivateRoute>
+                <Followup />
               </PrivateRoute>
             }
           />

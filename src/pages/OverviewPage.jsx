@@ -15,6 +15,12 @@ const OverviewPage = () => {
 	const [employees, setEmployees] = useState('');
 	const [packages, setPackages] = useState('');
 	const [bookings, setBookings] = useState('');
+	const [customers, setCustomers] = useState('');
+	const [todayLeads, setTodayLeads] = useState('');
+	const [monthLeads, setMonthLeads] = useState('');
+	const [todayCallBacks, setTodayCallBacks] = useState('');
+	const [sources, setSources] = useState([]);
+	const [stages, setStages] = useState([]);
 	const storeId = Cookies.get("storeId");
 	const fetchStores = async () => {
 		try {
@@ -46,6 +52,12 @@ const OverviewPage = () => {
 			setEmployees(response.data.employees);
 			setPackages(response.data.packages);	
 			setBookings(response.data.bookings);
+			setCustomers(response.data.customers);
+			setTodayLeads(response.data.todayLeads);
+			setMonthLeads(response.data.monthLeads);
+			setSources(response.data.sources);
+			setStages(response.data.stages);
+			setTodayCallBacks(response.data.todayCallBacks);
 		  }
 		}
 		} catch (error) {
@@ -72,6 +84,16 @@ const OverviewPage = () => {
 					<StatCard name='Total Packages' icon={BarChart2} value={packages} color='#10B981' />
 					{!storeId && <StatCard name='Total Stores' icon={Zap} value={stores} color='#6366F1' />}
 					{!storeId && <StatCard name='Total Employees' icon={Users} value={employees} color='#8B5CF6' />}
+					{!storeId && <StatCard name='Total Customers' icon={Users} value={customers} color='#8B5CF6' />}
+					{!storeId && <StatCard name='Today Leads' icon={Users} value={todayLeads} color='#8B5CF6' />}
+					{!storeId && <StatCard name='Month Leads' icon={Users} value={monthLeads} color='#8B5CF6' />}
+					{!storeId && <StatCard name='Today CallBacks' icon={Users} value={todayCallBacks} color='#8B5CF6' />}
+					{stages.map((stage) => (
+						<StatCard name={stage.name} icon={Users} value={stage.leadsCount} color='#8B5CF6' />
+					))}
+					{sources.map((source) => (
+						<StatCard name={source.name} icon={Users} value={source.leadsCount} color='#8B5CF6' />
+					))}
 				</motion.div>
 
 				{/* CHARTS */}
