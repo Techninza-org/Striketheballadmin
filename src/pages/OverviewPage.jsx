@@ -57,7 +57,7 @@ const OverviewPage = () => {
 			setMonthLeads(response.data.monthLeads);
 			setSources(response.data.sources);
 			setStages(response.data.stages);
-			setTodayCallBacks(response.data.todayCallBacks);
+			setTodayCallBacks(response.data.todayFollowUps);
 		  }
 		}
 		} catch (error) {

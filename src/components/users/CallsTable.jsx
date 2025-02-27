@@ -144,9 +144,9 @@ const CallsTable = () => {
               {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Duration
               </th>  */}
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Remarks
-              </th>
+              </th> */}
             </tr>
           </thead>
 
@@ -182,11 +182,11 @@ const CallsTable = () => {
                 {/* <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{call.duration}</div>
                 </td>  */}
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <button className="text-red-400 hover:text-red-300">
                     Remarks
                   </button>
-                </td>
+                </td> */}
               </motion.tr>
             ))}
           </tbody>
