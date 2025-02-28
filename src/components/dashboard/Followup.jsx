@@ -128,10 +128,6 @@ export default function Followup() {
 			alert("Select a Stage");
 			return;
 		}
-		if(comment === ""){
-			alert("Add Comments");
-			return;
-		}
 		const followup = await axios.post(
 			`${import.meta.env.VITE_BASE_URL}/lead/lead`,
 			{
@@ -139,7 +135,7 @@ export default function Followup() {
 				stage: stage,
         source: source,
 				comments: comment,
-				callbackDate: date,
+				callbackDate: date || null,
 			},
 			{
 				headers: {
@@ -194,14 +190,11 @@ export default function Followup() {
             </div>
             <div>
             <DatePicker
+  selected={date}
   onChange={(selectedDate) => {
     if (selectedDate) {
-      // Convert to IST (UTC+5:30)
-      const istOffset = 5.5 * 60 * 60 * 1000; // 5 hours 30 minutes in milliseconds
+      const istOffset = 5.5 * 60 * 60 * 1000; 
       const adjustedDate = new Date(selectedDate.getTime() + istOffset);
-
-      // adjustedDate.setHours(0, 0, 0, 0); // Set time to 00:00:00
-      console.log(adjustedDate);
       setDate(adjustedDate);
     } else {
       setDate(null);
