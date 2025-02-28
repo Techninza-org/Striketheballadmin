@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, DownloadIcon, RefreshCcwDotIcon, TimerResetIcon, RefreshCcw } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import EditCustomerModal from "./EditCustomerModal";
 import { Link } from "react-router-dom";
+import { unparse } from "papaparse";
 
 const CustomersTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,6 +20,7 @@ const CustomersTable = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [stages, setStages] = useState([]);
   const [sources, setSources] = useState([]);
+  const [selectedStage, setSelectedStage] = useState("");
 
   const fetchStores = async () => {
 	try {
@@ -151,7 +153,9 @@ const CustomersTable = () => {
   async function handleStageFilter(stage){
     if(stage === ""){
       fetchStores();
+      setSelectedStage("");
     }else{
+      setSelectedStage(stage);
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/lead/customer/leads/stage/${stage}`,
         {
@@ -197,6 +201,36 @@ const CustomersTable = () => {
     if(response.data.valid){
       setStores(response.data.customers);
       setFilteredStores(response.data.customers);
+    }
+  }
+
+  async function downloadData(){
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/lead/download/${selectedStage}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if(response.data.valid){
+      const data = response.data.customers;
+      if (!data.length) return;
+
+      // Convert JSON to CSV
+      const csv = unparse(data);
+
+      // Create a Blob and trigger download
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "data.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
     }
   }
 
@@ -258,7 +292,8 @@ const CustomersTable = () => {
           />
           <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
         </div>
-        <button className="bg-blue-900 p-2 rounded-md text-white" onClick={fetchStores}>Reset</button>
+        <button className="bg-blue-900 p-2 rounded-md text-white" onClick={fetchStores}><RefreshCcw /></button>
+        <button className={`bg-blue-900 p-2 rounded-md text-white ${selectedStage === "" ? 'disabled:bg-gray-500 disabled:cursor-not-allowed' : ''}`} disabled={selectedStage === ""} onClick={downloadData}><DownloadIcon /></button>
         </div>
       </div>
 
