@@ -247,7 +247,7 @@ const CustomersTable = () => {
       
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-100">Customers</h2>
-        <div className="flex gap-10">
+        <div className="flex gap-4">
 
           <button className="bg-blue-900 p-2 rounded-md text-white" onClick={getTodayCallbacks}>Today Callbacks</button>
 
