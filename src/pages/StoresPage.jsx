@@ -67,9 +67,9 @@ const StoresPage = () => {
 					<StatCard name='Churn Rate' icon={UserX} value={userStats.churnRate} color='#EF4444' /> */}
 				</motion.div>
 
-				{/* <div className="flex justify-end">
+				<div className="flex justify-end">
 					<a className="bg-white text-blue-800 p-2 rounded-md mb-4 font-bold" href="/add-store">New Store</a>
-				</div> */}
+				</div>
 
 				<StoresTable />
 

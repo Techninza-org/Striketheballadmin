@@ -21,6 +21,9 @@ const CustomersTable = () => {
   const [stages, setStages] = useState([]);
   const [sources, setSources] = useState([]);
   const [selectedStage, setSelectedStage] = useState("");
+  
+
+
 
   const fetchStores = async () => {
 	try {
@@ -58,9 +61,23 @@ const CustomersTable = () => {
   }
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const filter = params.get("filter");
+    const stage = params.get("stage");
+    const source = params.get("source");
+    
     fetchStores();
     getStages();
     getSources();
+    if(filter === "today"){
+      getTodayCallbacks();
+    }
+    if(stage !== null && stage !== undefined){
+      handleStageFilter(stage);
+    }
+    if(source !== null && source !== undefined){
+      handleSourceFilter(source);
+    }
   }, []);
 
   const handleSearch = (e) => {
@@ -292,7 +309,7 @@ const CustomersTable = () => {
           />
           <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
         </div>
-        <button className="bg-blue-900 p-2 rounded-md text-white" onClick={fetchStores}><RefreshCcw /></button>
+        <a href="/customers"><button className="bg-blue-900 p-2 rounded-md text-white" ><RefreshCcw /></button></a>
         <button className={`bg-blue-900 p-2 rounded-md text-white ${selectedStage === "" ? 'disabled:bg-gray-500 disabled:cursor-not-allowed' : ''}`} disabled={selectedStage === ""} onClick={downloadData}><DownloadIcon /></button>
         </div>
       </div>
@@ -359,7 +376,11 @@ const CustomersTable = () => {
                     <button className=" bg-white rounded-md p-2 text-black">
                     Follow Up
                     </button>
-
+                  </Link>
+                  <Link to={`/bookings?customer=${store.id}`} >
+                    <button className="  ml-4 bg-white rounded-md p-2 text-black">
+                    Bookings
+                    </button>
                   </Link>
                 </td>
                 }

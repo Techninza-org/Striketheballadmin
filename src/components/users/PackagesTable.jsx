@@ -173,11 +173,11 @@ const PackagesTable = () => {
                 {/* <td className='px-6 py-4 whitespace-nowrap'>
 									<div className='text-sm text-gray-300'>{new Date(store.createdAt).toLocaleDateString()}</div>
 								</td> */}
-                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <button className="text-red-400 hover:text-red-300" onClick={() => handleDelete(store.id)}>
                     Delete
                   </button>
-                </td> */}
+                </td>
               </motion.tr>
             ))}
           </tbody>

@@ -16,6 +16,8 @@ const BookingPage = () => {
 	const [selectedStore, setSelectedStore] = useState('0');
 	const [status, setStatus] = useState('');
 	const [customerType, setCustomerType] = useState('');
+	const params = new URLSearchParams(window.location.search);
+	const customerId = params.get('customerId');
     const fetchBookings = async () => {
         try {
           const authToken = Cookies.get("authToken");
