@@ -13,6 +13,7 @@ const GENERAL_SIDEBAR_ITEMS = [
     { name: "Logs", icon: Book, color: "#EC4899", href: "/logs" },
     { name: "Stores", icon: Store, color: "#EC4899", href: "/stores" },
     { name: "Employees", icon: User2Icon, color: "#8B5CF6", href: "/employees" },
+    // { name: "Passwords", icon: User2Icon, color: "#8B5CF6", href: "/password" },
     { name: "Subadmins", icon: PersonStanding, color: "#6366f1", href: "/subadmins" },
     { name: "Packages", icon: Package, color: "#EC4899", href: "/packages" },
     

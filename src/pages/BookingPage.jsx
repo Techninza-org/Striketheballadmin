@@ -17,7 +17,30 @@ const BookingPage = () => {
 	const [status, setStatus] = useState('');
 	const [customerType, setCustomerType] = useState('');
 	const params = new URLSearchParams(window.location.search);
-	const customerId = params.get('customerId');
+	const customerId = params.get('customer');
+
+	const fetchBookingsByCustomerId = async (customerId) => {
+		try {
+			const authToken = Cookies.get("authToken");
+	
+			const response = await axios.get(
+				`${import.meta.env.VITE_BASE_URL}/admin/booking/customer/${customerId}`,
+				{
+					headers: {
+						Authorization: `Bearer ${authToken}`,
+						"Content-Type": "application/json",
+					},
+				}
+			);
+	
+			if (response.data.valid) {
+				setBookings(response.data.bookings);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
     const fetchBookings = async () => {
         try {
           const authToken = Cookies.get("authToken");
@@ -63,9 +86,13 @@ const BookingPage = () => {
     };
     
       useEffect(() => {
+		const customerId = params.get('customer');
         fetchStores();
 		fetchBookings();
-      }, []);
+		if(customerId !== null){
+			fetchBookingsByCustomerId(customerId);
+		}
+      }, [customerId]);
 
 	const handleStoreChange = (e) => {
 		const storeId = e.target.value;

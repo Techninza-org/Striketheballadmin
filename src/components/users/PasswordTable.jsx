@@ -4,149 +4,77 @@ import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const AdminLogsTable = () => {
+const PasswordTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredStores, setFilteredStores] = useState([]);
   const [stores, setStores] = useState([]);
-  const [storess, setStoress] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedStore, setSelectedStore] = useState('0');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const params = new URLSearchParams(window.location.search);
-  const customerId = params.get('customer');
 
-  const fetchLogs = async () => {
-    try {
-      const authToken = Cookies.get("authToken");
+  const fetchEmployees = async () => {
+	try {
+	  const authToken = Cookies.get("authToken");
 
-      const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/admin/booking/logs/all`,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+	  const response = await axios.get(
+		`${import.meta.env.VITE_BASE_URL}/admin/employee/all`,
+		{
+		  headers: {
+			Authorization: `Bearer ${authToken}`,
+			"Content-Type": "application/json",
+		  },
+		}
+	  );
 
-      if (response.data.valid) {
-        setStores(response.data.bookingLogs);
-        setFilteredStores(response.data.bookingLogs);
-        setLoading(false);
-      }
-    } catch (error) {
-      console.log(error);
-      setError("Failed to fetch logs");
-      setLoading(false);
-    }
+	  if (response.data.valid) {
+		setStores(response.data.employees);
+		setFilteredStores(response.data.employees);
+	  }
+	} catch (error) {
+	  setError(error.response?.data?.message || error.message);
+	} finally {
+	  setLoading(false);
+	}
   };
 
-  const fetchStores = async () => {
-    try {
-      const authToken = Cookies.get("authToken");
-
-      const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/admin/store`,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.data.valid) {
-        setStoress(response.data.stores);
-      }
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-const fetchLogssByStore = async (storeId) => {
-  try {
-    const authToken = Cookies.get("authToken");
-
-    const response = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/admin/booking/logs/store/${storeId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (response.data.valid) {
-      setStores(response.data.bookingLogs);
-      setFilteredStores(response.data.bookingLogs);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-const fetchLogsByCustomerId = async (id) => {
-  try {
-    const authToken = Cookies.get("authToken");
-
-    const response = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/admin/booking/logs/customer/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (response.data.valid) {
-      setStores(response.data.bookingLogs);
-      setFilteredStores(response.data.bookingLogs);
-      setLoading(false);
-    }
-  } catch (error) {
-    console.log(error);
-    setLoading(false);
-  }
-};
-
-const handleStoreChange = (e) => {
-  const storeId = e.target.value;
-  setSelectedStore(storeId);
-
-  if (storeId === '0') {
-    fetchLogs(); 
-  } else {
-    fetchLogssByStore(storeId); 
-  }
-};
-
   useEffect(() => {
-    const customerId = params.get('customer');
-   
-    fetchStores();
-    if(customerId !== null){
-			fetchLogsByCustomerId(customerId);
-		}else{
-      fetchLogs();
-    }
-    console.log(customerId, 'cust ud');
-  }, [customerId]);
+    fetchEmployees();
+  }, []);
 
-  // const handleSearch = (e) => {
-  //   const term = e.target.value.toLowerCase();
-  //   setSearchTerm(term);
-  //   const filtered = stores.filter(
-  //     (log) =>
-  //       log.booking.store.name.toLowerCase().includes(term) ||
-  //       log.employee.name.toLowerCase().includes(term) ||
-  //       log.booking.customer.name.toLowerCase().includes(term)
-  //   );
-  //   setFilteredStores(filtered);
-  //   setCurrentPage(1);
-  // };
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+    const filtered = stores.filter(
+      (store) =>
+        store.name.toLowerCase().includes(term) ||
+        store.email.toLowerCase().includes(term) ||
+        store.phone.toLowerCase().includes(term)
+    );
+    setFilteredStores(filtered);
+    setCurrentPage(1);
+  };
+
+  async function handleChangePassword(id) {
+    console.log(id);
+    const authToken = Cookies.get("authToken");
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/admin/password/employee/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+	
+	if (response.data.valid) {
+		fetchEmployees();
+	}else{
+		setError(response.data.message);
+	}
+  }
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -170,6 +98,8 @@ const handleStoreChange = (e) => {
     setCurrentPage(pageNumber);
   };
 
+ 
+
   if (loading) {
     return <div className="text-center text-gray-100">Loading...</div>;
   }
@@ -179,37 +109,18 @@ const handleStoreChange = (e) => {
   }
 
   return (
-    <>
-    <div>
-						<select
-							name="storeId"
-							value={selectedStore}
-							onChange={handleStoreChange}
-							required
-							className="w-[300px] bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-							>
-							<option value="0">All Stores</option>
-							{storess?.map((store) => (
-								<option key={store.id} value={store.id}>
-									{store.name}
-								</option>
-							))}
-						</select>
-					</div>
-    
     <motion.div
-      className="bg-gray-800 mt-5 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
+      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-100">Booking Logs</h2>
-        
+        <h2 className="text-xl font-semibold text-gray-100">Employees</h2>
         {/* <div className="relative">
           <input
             type="text"
-            placeholder="Search logs..."
+            placeholder="Search employees..."
             className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={handleSearch}
@@ -223,27 +134,27 @@ const handleStoreChange = (e) => {
           <thead>
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Store
+                Name
+              </th>
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Store Id
+              </th> */}
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Email
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Employee
+                Phone
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Customer
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Overs Played
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Date
+                Actions
               </th>
             </tr>
           </thead>
 
           <tbody className="divide-y divide-gray-700">
-            {currentItems.map((log) => (
+            {currentItems.map((store) => (
               <motion.tr
-                key={log.id}
+                key={store.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
@@ -252,42 +163,36 @@ const handleStoreChange = (e) => {
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
                       <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-400 to-blue-500 flex items-center justify-center text-white font-semibold">
-                        {log?.booking?.store?.name.charAt(0)}
+                        {store.name.charAt(0)}
                       </div>
                     </div>
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-100">
-                        {log?.booking?.store?.name}
+                        {store.name}
                       </div>
                     </div>
                   </div>
                 </td>
+
+                {/* <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-300">{store.storeId}</div>
+                </td> */}
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-100">
-                    {log?.employee?.name}
-                  </div>
+                  <div className="text-sm text-gray-300">{store.email}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-100">
-                    {log?.booking?.customer?.name}
-                  </div>
+                  <div className="text-sm text-gray-300">{store.phone}</div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-100">
-                    {log?.overs}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-100">
-                    {log?.createdAt.slice(0, 10)}
-                  </div>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                  <button className="text-white bg-danger" onClick={() => handleChangePassword(store.id)}>
+                    Change Password
+                  </button>
                 </td>
               </motion.tr>
             ))}
           </tbody>
         </table>
       </div>
-
       <div className="flex justify-between items-center mt-6">
         <button
           onClick={handlePreviousPage}
@@ -367,8 +272,7 @@ const handleStoreChange = (e) => {
         </button>
       </div>
     </motion.div>
-    </>
   );
 };
 
-export default AdminLogsTable;
+export default PasswordTable;

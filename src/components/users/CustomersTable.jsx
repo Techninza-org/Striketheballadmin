@@ -382,6 +382,11 @@ const CustomersTable = () => {
                     Bookings
                     </button>
                   </Link>
+                  <Link to={`/logs?customer=${store.id}`} >
+                    <button className="  ml-4 bg-white rounded-md p-2 text-black">
+                    Logs
+                    </button>
+                  </Link>
                 </td>
                 }
               </motion.tr>

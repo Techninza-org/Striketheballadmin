@@ -33,6 +33,7 @@ import Calls from "./pages/CallsPage";
 import Dashboard from "./components/dashboard/Followup";
 import ManageLeads from "./components/dashboard/ManageLeads";
 import Followup from "./components/dashboard/Followup";
+import PasswordPage from "./pages/PasswordPage";
 
 
 function App() {
@@ -203,6 +204,14 @@ function App() {
             element={
               <AdminPrivateRoute>
                 <BookingPage />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/password"
+            element={
+              <AdminPrivateRoute>
+                <PasswordPage />
               </AdminPrivateRoute>
             }
           />
