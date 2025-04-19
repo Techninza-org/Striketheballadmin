@@ -3,8 +3,11 @@ import { motion } from "framer-motion";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import PasswordModal from "./PasswordModal";
 
 const PasswordTable = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEmpId, setSelectedEmpId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredStores, setFilteredStores] = useState([]);
   const [stores, setStores] = useState([]);
@@ -12,6 +15,16 @@ const PasswordTable = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+
+  const openPasswordModal = (id) => {
+    setSelectedEmpId(id);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedEmpId(null);
+  };
 
   const fetchEmployees = async () => {
 	try {
@@ -55,26 +68,6 @@ const PasswordTable = () => {
     setCurrentPage(1);
   };
 
-  async function handleChangePassword(id) {
-    console.log(id);
-    const authToken = Cookies.get("authToken");
-
-    const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/admin/password/employee/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-	
-	if (response.data.valid) {
-		fetchEmployees();
-	}else{
-		setError(response.data.message);
-	}
-  }
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -115,6 +108,11 @@ const PasswordTable = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
+      <PasswordModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        empId={selectedEmpId}
+      />
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-100">Employees</h2>
         {/* <div className="relative">
@@ -184,7 +182,7 @@ const PasswordTable = () => {
                   <div className="text-sm text-gray-300">{store.phone}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  <button className="text-white bg-danger" onClick={() => handleChangePassword(store.id)}>
+                  <button className="text-white bg-danger" onClick={() => openPasswordModal(store.id)}>
                     Change Password
                   </button>
                 </td>

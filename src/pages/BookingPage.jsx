@@ -260,7 +260,10 @@ const BookingPage = () => {
 						</select>
 					</div>
 					</div>
-					<a className="bg-white text-blue-800 p-2 rounded-md mb-4 font-bold" href="/add-booking">New Booking</a>
+					<div className="flex gap-3">
+						<a className="bg-white text-blue-800 p-2 rounded-md mb-4 font-bold" href="/add-booking">Existing Customer Booking</a>
+						<a className="bg-white text-blue-800 p-2 rounded-md mb-4 font-bold" href="/add-direct-booking">New Customer Booking</a>
+					</div>
 				</div>
 				<BookingsTable bookings={bookings} />
 			</main>

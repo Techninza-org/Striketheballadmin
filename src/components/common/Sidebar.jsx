@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { motion } from "framer-motion";
-import { BarChart2, Users, ShoppingBag, Package, DollarSignIcon, User2Icon, PhoneCall, Book, Power, Store, PersonStanding, BarChart3 } from "lucide-react";
+import { BarChart2, Users, ShoppingBag, Package, DollarSignIcon, User2Icon, PhoneCall, Book, Power, Store, PersonStanding, BarChart3, EyeOff } from "lucide-react";
 import SideNav from "./SideNav"; 
 
 const GENERAL_SIDEBAR_ITEMS = [
@@ -13,7 +13,7 @@ const GENERAL_SIDEBAR_ITEMS = [
     { name: "Logs", icon: Book, color: "#EC4899", href: "/logs" },
     { name: "Stores", icon: Store, color: "#EC4899", href: "/stores" },
     { name: "Employees", icon: User2Icon, color: "#8B5CF6", href: "/employees" },
-    // { name: "Passwords", icon: User2Icon, color: "#8B5CF6", href: "/password" },
+    { name: "Passwords", icon: EyeOff, color: "#8B5CF6", href: "/password" },
     { name: "Subadmins", icon: PersonStanding, color: "#6366f1", href: "/subadmins" },
     { name: "Packages", icon: Package, color: "#EC4899", href: "/packages" },
     

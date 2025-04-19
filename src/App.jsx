@@ -34,6 +34,7 @@ import Dashboard from "./components/dashboard/Followup";
 import ManageLeads from "./components/dashboard/ManageLeads";
 import Followup from "./components/dashboard/Followup";
 import PasswordPage from "./pages/PasswordPage";
+import AddDirectBooking from "./pages/AddDirectBookingPage";
 
 
 function App() {
@@ -212,6 +213,14 @@ function App() {
             element={
               <AdminPrivateRoute>
                 <PasswordPage />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/add-direct-booking"
+            element={
+              <AdminPrivateRoute>
+                <AddDirectBooking />
               </AdminPrivateRoute>
             }
           />
