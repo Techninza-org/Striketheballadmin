@@ -257,6 +257,7 @@ const BookingPage = () => {
 							<option value="0">NORMAL</option>
 							<option value="1">IVR</option>
 							<option value="2">WHATSAPP</option>
+							<option value="3">ENQUIRY</option>
 						</select>
 					</div>
 					</div>
