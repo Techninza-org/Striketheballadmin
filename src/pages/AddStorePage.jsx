@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const CreateStorePage = () => {
+	const [imageUrl, setImageUrl] = useState(null);
+	const [uploading, setUploading] = useState(false);
 	const [formData, setFormData] = useState({
 		name: "",
 		address: "",
@@ -16,6 +18,31 @@ const CreateStorePage = () => {
 	const [error, setError] = useState(null);
 	const [success, setSuccess] = useState(null);
     const navigate = useNavigate();
+
+	const handleFileChange = async (e) => {
+		const file = e.target.files[0];
+		if (!file) return;
+	
+		const formData2 = new FormData();
+		formData2.append("file", file); 
+	
+		try {
+		  setUploading(true);
+	
+		  const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/upload`, formData2, {
+			  headers: {
+				  "Content-Type": "multipart/form-data",
+			  }
+		  })
+		  const data = res.data;
+		  setImageUrl(data.file);
+		  setFormData({ ...formData, image: data.file });
+		} catch (err) {
+		  console.error("Upload failed:", err);
+		} finally {
+		  setUploading(false);
+		}
+	  };
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
@@ -52,6 +79,12 @@ const CreateStorePage = () => {
 			setLoading(false);
 		}
 	};
+
+	const handleRemoveImage = () => {
+		setImageUrl(null);
+		setFormData({ ...formData, image: "" });
+	  };
+
 
 	return (
 		<div className="flex-1 overflow-auto relative z-10">
@@ -96,7 +129,7 @@ const CreateStorePage = () => {
 							/>
 						</div>
 
-						<div>
+						<div className="pb-8">
 							<label className="block text-sm font-medium text-gray-200 mb-2">Phone</label>
 							<input
 								type="text"
@@ -109,7 +142,7 @@ const CreateStorePage = () => {
 							/>
 						</div>
 
-						<div>
+						{/* <div className="pb-8">
 							<label className="block text-sm font-medium text-gray-200 mb-2">Store Location</label>
 							<input
 								type="text"
@@ -120,9 +153,32 @@ const CreateStorePage = () => {
 								className="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 								placeholder="Enter store location"
 							/>
-						</div>
+						</div> */}
 
-						<div>
+						{!imageUrl ? (
+    					    <label className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow">
+    					      {uploading ? "Uploading..." : "Upload Image"}
+    					      <input
+    					        type="file"
+    					        accept="image/*"
+    					        onChange={handleFileChange}
+    					        className="hidden"
+    					        disabled={uploading}
+    					      />
+    					    </label>
+    					  ) : (
+    					    <div className="relative inline-block">
+    					      <img src={`${import.meta.env.VITE_BASE_URL}/${imageUrl}`} alt="Uploaded" className="max-w-xs rounded shadow-md" />
+    					      <button
+    					        onClick={handleRemoveImage}
+    					        className="absolute top-1 right-1 bg-white text-red-500 border border-red-500 rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-500 hover:text-white transition"
+    					      >
+    					        &times;
+    					      </button>
+    					    </div>
+    					  )}
+
+						<div className="pt-4">
 							<button
 								type="submit"
 								className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 transition focus:outline-none focus:ring-2 focus:ring-blue-400"

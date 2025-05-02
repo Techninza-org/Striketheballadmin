@@ -108,32 +108,27 @@ const PackagesTable = () => {
                 Name
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Overs
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Price
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Overs
-              </th>
-              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Title
+                Machine Price
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Description
-              </th> */}
-              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Store Id
+                Robo Arm Price
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Address
+                Validity
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Phone
-              </th> */}
-              {/* <th className='px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider'>
-								Created On
-							</th> */}
-              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Actions
-              </th> */}
+                Type
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Image
+              </th>
+             
             </tr>
           </thead>
 
@@ -161,18 +156,29 @@ const PackagesTable = () => {
                 </td>
 
                 <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-300">{store.overs}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{store.price}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-300">{store.overs}</div>
+                  <div className="text-sm text-gray-300">{store.normalMachinePrice}</div>
                 </td>
-                {/* <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-300">{store.description}</div>
-                </td> */}
-                
-                {/* <td className='px-6 py-4 whitespace-nowrap'>
-									<div className='text-sm text-gray-300'>{new Date(store.createdAt).toLocaleDateString()}</div>
-								</td> */}
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-300">{store.roboArmPrice}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-300">{store.validity}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-300">{store.type}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-300">
+                    <img className="w-[150px]" src={`${import.meta.env.VITE_BASE_URL}/${store.image}`} alt="" />
+                  </div>
+                </td>
+               
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <button className="text-red-400 hover:text-red-300" onClick={() => handleDelete(store.id)}>
                     Delete
