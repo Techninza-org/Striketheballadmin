@@ -41,6 +41,27 @@ export default function BookingDetailModal({ isOpen, onClose, bookingId }) {
     }
   }
 
+  async function markPayment() {
+    try{
+      const authToken = Cookies.get("authToken");
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/admin/booking/payment/${bookingId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.valid) {
+        getBooking();
+      }
+    }catch(err){
+      alert("Error marking payment");
+      console.log(err);
+    }  
+  }
+
   async function handleSubmitOvers() {
     console.log(bookingId, "id");
     const oversPlayed = document.querySelector(
@@ -117,6 +138,10 @@ export default function BookingDetailModal({ isOpen, onClose, bookingId }) {
           </p>
         </div>
         <div className="justify-between flex">
+          <p className="font-bold">Payment Status</p>
+          <p>{booking?.paid === true ? 'PAID' : 'UNPAID'}</p>
+        </div>
+        <div className="justify-between flex">
           <p className="font-bold">Total Overs</p>
           <p>{booking?.overs}</p>
         </div>
@@ -124,6 +149,9 @@ export default function BookingDetailModal({ isOpen, onClose, bookingId }) {
           <p className="font-bold">Overs Left</p>
           <p>{booking?.oversLeft}</p>
         </div>
+        {booking.paid === false &&  <div className="mt-4 flex justify-between">
+         <button className="bg-green-600 text-white rounded-lg p-3" onClick={() => markPayment()}>Mark Payment As Done</button>
+        </div>}
         <div className="mt-4 flex justify-between">
           <label htmlFor="oversplayed" className="font-bold uppercase">
             Overs Played

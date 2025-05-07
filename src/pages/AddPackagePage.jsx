@@ -136,6 +136,7 @@ const AddPackage = () => {
 								<option value="">Select Type</option>
 								<option value="INDIVIDUAL">Individual</option>
 								<option value="PACKAGE">Package</option>
+								<option value="SUBSCRIPTION">Subscription</option>
 							</select>
 						</div>
 						<div>
@@ -195,7 +196,7 @@ const AddPackage = () => {
 								placeholder="Enter robo arm price"
 							/>
 						</div>
-						{!imageUrl ? (
+						{/* {!imageUrl ? (
     					    <label className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow">
     					      {uploading ? "Uploading..." : "Upload Image"}
     					      <input
@@ -216,7 +217,7 @@ const AddPackage = () => {
     					        &times;
     					      </button>
     					    </div>
-    					  )}
+    					  )} */}
 						<div className="pt-4">
 							<button
 								type="submit"

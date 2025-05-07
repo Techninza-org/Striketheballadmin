@@ -154,7 +154,10 @@ const BookingsTable = ({ bookings }) => {
                     </div>
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-100">
-                        {booking.customer?.name}
+                        {booking.customer?.name} 
+                      </div>
+                      <div>
+                      {booking.paid ? <p className="text-xs text-green-500">PAID</p> : <p className="text-xs text-red-500">UNPAID</p>}
                       </div>
                     </div>
                   </div>
