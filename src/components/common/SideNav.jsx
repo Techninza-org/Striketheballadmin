@@ -35,7 +35,7 @@ export default function SideNav({ links, isSidebarOpen, setIsSidebarOpen }) {
         )}
       </div>
 
-      <nav className="mt-8 flex-grow">
+      <nav className="mt-8 flex-grow overflow-y-auto thin-scrollbar">
         {links.map((item) => (
           <Link key={item.href} to={item.href}>
             <motion.div
