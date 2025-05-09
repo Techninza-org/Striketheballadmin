@@ -372,17 +372,17 @@ const CustomersTable = () => {
                   {/* <button className="text-red-400 hover:text-red-300" onClick={() => handleDelete(store.id)}>
                     Delete
                   </button> */}
-                  <Link to={`/admin/followup/${store.id}`} >
+                  <Link to={`/followup/${store.id}`} >
                     <button className=" bg-white rounded-md p-2 text-black">
                     Follow Up
                     </button>
                   </Link>
-                  <Link to={`/admin/bookings?customer=${store.id}`} >
+                  <Link to={`/bookings?customer=${store.id}`} >
                     <button className="  ml-4 bg-white rounded-md p-2 text-black">
                     Bookings
                     </button>
                   </Link>
-                  <Link to={`/admin/logs?customer=${store.id}`} >
+                  <Link to={`/logs?customer=${store.id}`} >
                     <button className="  ml-4 bg-white rounded-md p-2 text-black">
                     Logs
                     </button>
