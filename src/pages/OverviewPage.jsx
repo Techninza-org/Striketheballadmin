@@ -252,7 +252,7 @@ const OverviewPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <a href="/bookings">
+          <a href="/admin/bookings">
             <StatCard
               name="Total Bookings"
               icon={ShoppingBag}
@@ -261,7 +261,7 @@ const OverviewPage = () => {
             />
           </a>
 
-          <a href="/packages">
+          <a href="/admin/packages">
             <StatCard
               name="Total Packages"
               icon={BarChart2}
@@ -270,7 +270,7 @@ const OverviewPage = () => {
             />
           </a>
           {!storeId && (
-            <a href="/stores">
+            <a href="/admin/stores">
               <StatCard
                 name="Total Stores"
                 icon={Zap}
@@ -280,7 +280,7 @@ const OverviewPage = () => {
             </a>
           )}
           {!storeId && (
-            <a href="/employees">
+            <a href="/admin/employees">
               <StatCard
                 name="Total Employees"
                 icon={Users}
@@ -290,7 +290,7 @@ const OverviewPage = () => {
             </a>
           )}
           {!storeId && (
-            <a href="/customers">
+            <a href="/admin/customers">
               <StatCard
                 name="Total Customers"
                 icon={Users}
@@ -316,7 +316,7 @@ const OverviewPage = () => {
             />
           )}
           {!storeId && (
-            <a href="/customers?filter=today">
+            <a href="/admin/customers?filter=today">
               <StatCard
                 name="Today CallBacks"
                 icon={Users}
@@ -326,7 +326,7 @@ const OverviewPage = () => {
             </a>
           )}
           {stages.map((stage) => (
-            <a href={`/customers?stage=${stage.name}`} key={stage.name}>
+            <a href={`/admin/customers?stage=${stage.name}`} key={stage.name}>
             <StatCard
               name={stage.name}
               icon={Users}
@@ -336,7 +336,7 @@ const OverviewPage = () => {
           </a>
           ))}
           {sources.map((source) => (
-            <a href={`/customers?source=${source.name}`} key={source.name}>
+            <a href={`/admin/customers?source=${source.name}`} key={source.name}>
             <StatCard
               key={source.name}
               name={source.name}
@@ -546,17 +546,17 @@ const OverviewPage = () => {
                   {/* <button className="text-blue-200 hover:text-blue-300 mr-6" onClick={() => openModal(store.id)}>
                     Edit
                   </button> */}
-                  <Link to={`/followup/${store.id}`} >
+                  <Link to={`/admin/followup/${store.id}`} >
                     <button className=" bg-white rounded-md p-2 text-black">
                     Follow Up
                     </button>
                   </Link>
-                  <Link to={`/bookings?customer=${store.id}`} >
+                  <Link to={`/admin/bookings?customer=${store.id}`} >
                     <button className="  ml-4 bg-white rounded-md p-2 text-black">
                     Bookings
                     </button>
                   </Link>
-                  <Link to={`/logs?customer=${store.id}`} >
+                  <Link to={`/admin/logs?customer=${store.id}`} >
                     <button className="  ml-4 bg-white rounded-md p-2 text-black">
                     Logs
                     </button>
