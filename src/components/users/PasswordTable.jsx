@@ -134,9 +134,9 @@ const PasswordTable = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Name
               </th>
-              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Store Id
-              </th> */}
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Role
+              </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Email
               </th>
@@ -172,9 +172,9 @@ const PasswordTable = () => {
                   </div>
                 </td>
 
-                {/* <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-300">{store.storeId}</div>
-                </td> */}
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-300">{store.role}</div>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{store.email}</div>
                 </td>
