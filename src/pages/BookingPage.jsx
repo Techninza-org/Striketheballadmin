@@ -11,7 +11,7 @@ import BookingsTable from "../components/users/BookingsTable";
 import DatePicker from "react-datepicker";
 
 const BookingPage = () => {
-  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDate, setSelectedDate] = useState(null);
   const [emp, setEmp] = useState("");
   const [bookings, setBookings] = useState([]);
   const [stores, setStores] = useState([]);
@@ -19,8 +19,32 @@ const BookingPage = () => {
   const [status, setStatus] = useState("");
   const [paid, setPaidStatus] = useState("");
   const [customerType, setCustomerType] = useState("");
+  const [revenue, setRevenue] = useState([]);
   const params = new URLSearchParams(window.location.search);
   const customerId = params.get("customer");
+
+  const fetchRevenue = async (date) => {
+    try {
+      const authToken = Cookies.get("authToken");
+      const dateToSend = date ? date : selectedDate;
+  
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/admin/bookings/revenue/${dateToSend}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      if (response.data.valid) {
+        setRevenue(response.data.revenue);
+      }
+    } catch (error) {
+      console.error("Error fetching revenue:", error);
+    }
+  };
 
   const fetchBookingsByCustomerId = async (customerId) => {
     try {
@@ -68,8 +92,9 @@ const BookingPage = () => {
   };
 
   const fetchBookingsByDate = async (date) => {
-	setSelectedDate(date);
-	try {
+    setSelectedDate(date);
+    try {
+    fetchRevenue(date);
 	  const authToken = Cookies.get("authToken");
 
 	  const response = await axios.get(
@@ -116,6 +141,7 @@ const BookingPage = () => {
     const customerId = params.get("customer");
     fetchStores();
     fetchBookings();
+    fetchRevenue();
     if (customerId !== null) {
       fetchBookingsByCustomerId(customerId);
     }
@@ -274,6 +300,15 @@ const BookingPage = () => {
             value={emp}
             color="#6366F1"
           />
+          {revenue.map((item) => (
+            <StatCard
+              key={item.id}
+              name={item.storeName}
+              icon={UsersIcon}
+              value={item.total}
+              color="#6366F1"
+            />
+          ))}
         </motion.div>
         <div className="space-y-5">
           <div className="flex flex-wrap gap-8">
