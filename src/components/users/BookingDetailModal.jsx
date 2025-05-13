@@ -45,7 +45,7 @@ export default function BookingDetailModal({ isOpen, onClose, bookingId }) {
     try{
       const authToken = Cookies.get("authToken");
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/admin/booking/payment/${bookingId}`,
+        `${import.meta.env.VITE_BASE_URL}/admin/booking/payment/mark/${bookingId}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,

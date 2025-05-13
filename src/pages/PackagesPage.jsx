@@ -65,7 +65,7 @@ const PackagesPage = () => {
 				</motion.div>
 
 				<div className="flex justify-end">
-					<a className="bg-white text-blue-800 p-2 rounded-md mb-4 font-bold" href="/add-package">New Package</a>
+					<a className="bg-white text-blue-800 p-2 rounded-md mb-4 font-bold" href="/admin/add-package">New Package</a>
 				</div>
 
 				<PackagesTable />

@@ -9,7 +9,6 @@ export default function ManageLeads() {
     // const authToken = Cookies.get("authToken");
     const fixedStages = [
         'New',
-        'Qualified',
         'Converted',
         'Promising',
         'Appointment Scheduled',

@@ -4,7 +4,7 @@ import AdminLogsTable from "../components/users/AdminLogsTable";
 const AdminBookingLogsPage = () => {
 	return (
 		<div className='flex-1 overflow-auto relative z-10'>
-			<Header title='Logs' />
+			<Header title='Overs Played' />
 			<main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
 				<AdminLogsTable />
 			</main>

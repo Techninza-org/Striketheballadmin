@@ -263,10 +263,10 @@ const ClientsTable = () => {
       )}
       
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-100">Customers</h2>
+        <h2 className="text-xl font-semibold text-gray-100">Clients</h2>
         <div className="flex gap-4">
 
-          <button className="bg-blue-900 p-2 rounded-md text-white" onClick={getTodayCallbacks}>Today Callbacks</button>
+          {/* <button className="bg-blue-900 p-2 rounded-md text-white" onClick={getTodayCallbacks}>Today Callbacks</button>
 
         
             <div className="w-[200px]">
@@ -298,7 +298,7 @@ const ClientsTable = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
         <div className="relative">
           <input
             type="text"
@@ -309,8 +309,8 @@ const ClientsTable = () => {
           />
           <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
         </div>
-        <a href="/customers"><button className="bg-blue-900 p-2 rounded-md text-white" ><RefreshCcw /></button></a>
-        <button className={`bg-blue-900 p-2 rounded-md text-white ${selectedStage === "" ? 'disabled:bg-gray-500 disabled:cursor-not-allowed' : ''}`} disabled={selectedStage === ""} onClick={downloadData}><DownloadIcon /></button>
+        {/* <a href="/admin/customers"><button className="bg-blue-900 p-2 rounded-md text-white" ><RefreshCcw /></button></a> */}
+        {/* <button className={`bg-blue-900 p-2 rounded-md text-white ${selectedStage === "" ? 'disabled:bg-gray-500 disabled:cursor-not-allowed' : ''}`} disabled={selectedStage === ""} onClick={downloadData}><DownloadIcon /></button> */}
         </div>
       </div>
 
@@ -372,19 +372,19 @@ const ClientsTable = () => {
                   {/* <button className="text-red-400 hover:text-red-300" onClick={() => handleDelete(store.id)}>
                     Delete
                   </button> */}
-                  <Link to={`/admin/followup/${store.id}`} >
+                  <Link to={`/followup/${store.id}`} >
                     <button className=" bg-white rounded-md p-2 text-black">
                     Follow Up
                     </button>
                   </Link>
-                  <Link to={`/admin/bookings?customer=${store.id}`} >
+                  <Link to={`/bookings?customer=${store.id}`} >
                     <button className="  ml-4 bg-white rounded-md p-2 text-black">
                     Bookings
                     </button>
                   </Link>
-                  <Link to={`/admin/logs?customer=${store.id}`} >
+                  <Link to={`/logs?customer=${store.id}`} >
                     <button className="  ml-4 bg-white rounded-md p-2 text-black">
-                    Logs
+                    Overs Played
                     </button>
                   </Link>
                 </td>

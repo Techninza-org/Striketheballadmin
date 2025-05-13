@@ -68,7 +68,7 @@ const StoresPage = () => {
 				</motion.div>
 
 				<div className="flex justify-end">
-					<a className="bg-white text-blue-800 p-2 rounded-md mb-4 font-bold" href="/add-store">New Store</a>
+					<a className="bg-white text-blue-800 p-2 rounded-md mb-4 font-bold" href="/admin/add-store">New Store</a>
 				</div>
 
 				<StoresTable />

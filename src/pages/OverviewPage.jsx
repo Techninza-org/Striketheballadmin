@@ -558,7 +558,7 @@ const OverviewPage = () => {
                   </Link>
                   <Link to={`/admin/logs?customer=${store.id}`} >
                     <button className="  ml-4 bg-white rounded-md p-2 text-black">
-                    Logs
+                    Overs Played
                     </button>
                   </Link>
                 </td>

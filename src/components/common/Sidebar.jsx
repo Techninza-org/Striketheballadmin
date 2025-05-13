@@ -5,13 +5,13 @@ import { BarChart2, Users, ShoppingBag, Package, DollarSignIcon, User2Icon, Phon
 import SideNav from "./SideNav"; 
 
 const GENERAL_SIDEBAR_ITEMS = [
-    { name: "Overview", icon: BarChart2, color: "#6366f1", href: "/" },
+    { name: "Overview", icon: BarChart2, color: "#6366f1", href: "//" },
     { name: "Customers", icon: Users, color: "#6366f1", href: "/customers" },
     { name: "Clients", icon: Users, color: "#6366f1", href: "/clients" },
     { name: "Bookings", icon: DollarSignIcon, color: "#8B5CF6", href: "/bookings" },
     { name: "Manage Leads", icon: BarChart3, color: "#6366f1", href: "/manage-leads" },
     { name: "Calls", icon: PhoneCall, color: "#8B5CF6", href: "/calls" },
-    { name: "Logs", icon: Book, color: "#EC4899", href: "/logs" },
+    { name: "Overs Played", icon: Book, color: "#EC4899", href: "/logs" },
     { name: "Stores", icon: Store, color: "#EC4899", href: "/stores" },
     { name: "Packages", icon: Package, color: "#EC4899", href: "/packages" },
     { name: "Employees", icon: User2Icon, color: "#8B5CF6", href: "/employees" },

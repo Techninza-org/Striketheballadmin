@@ -35,19 +35,9 @@ const Header = ({ title }) => {
   return (
     <header className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg border-b border-gray-700">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a
-          href="https://flowbite.com/"
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
-          {/* <img
-					src="https://flowbite.com/docs/images/logo.svg"
-					className="h-8"
-					alt="Flowbite Logo"
-				/> */}
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             {title}
           </span>
-        </a>
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           <button
             onClick={toggleDropdown}
@@ -55,31 +45,16 @@ const Header = ({ title }) => {
             type="button"
           >
             <span className="sr-only">Open user menu</span>
-            {/* <img
-              className="w-8 h-8 rounded-full"
-              src="./profile.png"
-              alt="user photo"
-            /> */}
             <div className="rounded-full bg-white w-8 h-8 grid place-content-center">
               <div className="font-medium truncate text-black ">{email[0].toUpperCase()}</div>
             </div>
           </button>
-          {/* Dropdown menu */}
           {isDropdownOpen && (
             <div className="absolute right-10 top-10 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 z-50">
               <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                 <div className="font-medium truncate">{email}</div>
               </div>
-              {/* <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Settings
-                  </a>
-                </li>
-              </ul> */}
+          
               <div className="py-2">
                 <p
                   onClick={handleLogout}

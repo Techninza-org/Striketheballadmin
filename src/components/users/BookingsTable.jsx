@@ -132,6 +132,12 @@ const BookingsTable = ({ bookings }) => {
                 Price
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Paid To
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Payment Date
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -203,6 +209,12 @@ const BookingsTable = ({ bookings }) => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{booking?.price}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-300">{booking?.paymentMarkedBy}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-300">  {booking?.paymentMarkedAt && new Date(booking.paymentMarkedAt).toLocaleDateString()}</div>
                 </td>
                 {booking.oversLeft > 0 && (
                   <td className="px-6 py-4 whitespace-nowrap">

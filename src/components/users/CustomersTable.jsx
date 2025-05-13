@@ -309,7 +309,7 @@ const CustomersTable = () => {
           />
           <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
         </div>
-        <a href="/customers"><button className="bg-blue-900 p-2 rounded-md text-white" ><RefreshCcw /></button></a>
+        <a href="/admin/customers"><button className="bg-blue-900 p-2 rounded-md text-white" ><RefreshCcw /></button></a>
         <button className={`bg-blue-900 p-2 rounded-md text-white ${selectedStage === "" ? 'disabled:bg-gray-500 disabled:cursor-not-allowed' : ''}`} disabled={selectedStage === ""} onClick={downloadData}><DownloadIcon /></button>
         </div>
       </div>
