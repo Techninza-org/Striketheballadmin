@@ -324,6 +324,9 @@ const CustomersTable = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Phone
               </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                Created On Date
+              </th>
               {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Email
               </th> */}
@@ -360,6 +363,9 @@ const CustomersTable = () => {
 
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{store.phone}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-300">{store?.createdAt?.toLocaleString().split('T')[0]}</div>
                 </td>
                 {/* <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{store.email}</div>
