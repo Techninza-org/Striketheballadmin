@@ -147,7 +147,7 @@ const AddEmployeePage = () => {
 							/>
 						</div>
 
-						<div>
+						{/* <div>
 							<label className="block text-sm font-medium text-gray-200 mb-2">Phone</label>
 							<input
 								type="text"
@@ -158,7 +158,7 @@ const AddEmployeePage = () => {
 								className="w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 								placeholder="Enter phone number"
 							/>
-						</div>
+						</div> */}
 
 						<div>
 							<label className="block text-sm font-medium text-gray-200 mb-2">Password</label>
