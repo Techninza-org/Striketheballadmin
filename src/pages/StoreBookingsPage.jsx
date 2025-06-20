@@ -107,7 +107,7 @@ const StoreBookingsPage = () => {
 							<option value="1">Completed</option>
 						</select>
 					</div>
-					<a className="bg-white text-blue-800 p-2 rounded-md mb-4 font-bold" href="/store-add-booking">New Booking</a>
+					<a className="bg-white text-blue-800 p-2 rounded-md mb-4 font-bold" href="/admin/store-add-booking">New Booking</a>
 				</div>
 				<BookingsTable bookings={bookings} />
 			</main>
